@@ -1,6 +1,7 @@
 package ms.mscom.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -22,5 +23,9 @@ public class MessengerDAOImpl implements MessengerDAO {
 	@Override
 	public List<UserVO> findFriends(String user_id) throws Exception {
 		return sqlSession.selectList(namespace+".findFriends", user_id);
+	}
+	@Override
+	public void addRequest(Map<String, String> map) throws Exception {
+		sqlSession.insert(namespace+".addRequest", map);
 	}
 }

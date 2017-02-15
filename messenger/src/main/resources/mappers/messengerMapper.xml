@@ -11,4 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="findFriends" resultType="UserVO">
 		select * from m_user where user_id LIKE #{user_id}
 	</select>
+	<insert id="addRequest">
+		insert into user_request(r_count, request_id, response_id, request_date, state) values(r_count.nextval,#{request_id}, #{response_id}, SYSDATE, 'Waiting')
+	</insert>
 </mapper>

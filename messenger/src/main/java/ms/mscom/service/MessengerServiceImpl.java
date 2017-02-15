@@ -1,6 +1,7 @@
 package ms.mscom.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,10 @@ public class MessengerServiceImpl implements MessengerService {
 	public List<UserVO> findFriends(String user_id) throws Exception {
 		String value = "%"+user_id+"%";
 		return dao.findFriends(value);
+	}
+	@Override
+	public void addRequest(Map<String, String> map) throws Exception {
+		dao.addRequest(map);
 	}
 
 }

@@ -1,11 +1,17 @@
 package ms.mscom.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -43,5 +49,25 @@ public class HomeController {
 	@ResponseBody
 	public List<UserVO> findF(@RequestParam("user_id") String user_id)throws Exception{
 		return ms.findFriends(user_id);
+	}
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(UserVO vo, HttpServletRequest request,Model model)throws Exception{
+		HttpSession session = request.getSession();
+		List<UserVO> list = null;
+		model.addAttribute("list", list);
+		model.addAttribute("user", vo);
+		session.setAttribute("user", vo);
+		return "home";
+	}
+	@RequestMapping("/f-request")
+	public String f_friends(@RequestParam("user_id") String user_id,
+			HttpServletRequest request)throws Exception{
+		Map<String, String> map = new HashMap<String, String>();
+		HttpSession session = request.getSession();
+		UserVO sessionVo = (UserVO) session.getAttribute("user");
+		map.put("request_id", sessionVo.getUser_id());
+		map.put("response_id",user_id);
+		ms.addRequest(map);
+		return "home";
 	}
 }
