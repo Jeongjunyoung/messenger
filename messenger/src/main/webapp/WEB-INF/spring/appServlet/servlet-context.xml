@@ -22,11 +22,11 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="ms.mscom.msapp" />
-	<beans:bean id="echoHandler" class="ms.mscom.msapp.EchoHandler"/>
+	<context:component-scan base-package="ms.mscom.controller" />
+	<beans:bean id="echoHandler" class="ms.mscom.controller.EchoHandler"/>
     <websocket:handlers>
         <websocket:mapping handler="echoHandler" path="/echo" />
         <websocket:sockjs />
     </websocket:handlers>
-	
+	<context:component-scan base-package="ms.mscom.controller" />
 </beans:beans>
