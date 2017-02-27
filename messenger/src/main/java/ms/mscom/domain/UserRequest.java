@@ -6,6 +6,8 @@ public class UserRequest {
 	private String request_id;
 	private String response_id;
 	private Timestamp date;
+	private String state;
+	private int r_count;
 	public String getRequest_id() {
 		return request_id;
 	}
@@ -23,5 +25,17 @@ public class UserRequest {
 	}
 	public void setDate(Timestamp date) {
 		this.date = date;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public int getR_count() {
+		return r_count;
+	}
+	public void setR_count(int r_count) {
+		this.r_count = r_count;
 	}
 }

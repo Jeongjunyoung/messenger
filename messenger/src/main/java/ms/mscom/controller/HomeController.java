@@ -1,5 +1,6 @@
 package ms.mscom.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ms.mscom.domain.RelationUser;
+import ms.mscom.domain.UserRequest;
 import ms.mscom.domain.UserVO;
 import ms.mscom.service.MessengerService;
 
@@ -53,8 +56,20 @@ public class HomeController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(UserVO vo, HttpServletRequest request,Model model)throws Exception{
 		HttpSession session = request.getSession();
-		List<UserVO> list = null;
-		model.addAttribute("list", list);
+		List<UserRequest> r_list = ms.getRequestList(vo.getUser_id());
+		List<RelationUser> getF_list = ms.getFriendsList(vo.getUser_id());
+		List<UserVO> f_list = new ArrayList<UserVO>();
+		for(int i=0; i<getF_list.size();i++){
+			UserVO uvo = new UserVO();
+			if(vo.getUser_id().equals(getF_list.get(i).getUser_1())){
+				uvo.setUser_id(getF_list.get(i).getUser_2());
+			}else if(vo.getUser_id().equals(getF_list.get(i).getUser_2())){
+				uvo.setUser_id(getF_list.get(i).getUser_1());
+			}
+			f_list.add(uvo);
+		}
+		model.addAttribute("r_list", r_list);
+		model.addAttribute("f_list", f_list);
 		model.addAttribute("user", vo);
 		session.setAttribute("user", vo);
 		return "home";
@@ -68,6 +83,24 @@ public class HomeController {
 		map.put("request_id", sessionVo.getUser_id());
 		map.put("response_id",user_id);
 		ms.addRequest(map);
+		return "home";
+	}
+	@RequestMapping("/r_accept")
+	@ResponseBody
+	public RelationUser r_accept(@RequestParam("request_id") String request_id,
+			HttpServletRequest request)throws Exception{
+		HttpSession session = request.getSession();
+		UserVO sessionVo = (UserVO) session.getAttribute("user");
+		RelationUser ru = new RelationUser();
+		ru.setUser_1(sessionVo.getUser_id());
+		ru.setUser_2(request_id);
+		ms.requestAccept(ru);
+		return ru;
+	}
+	@RequestMapping("/logout")
+	public String logout(HttpServletRequest request)throws Exception{
+		HttpSession session = request.getSession();
+		session.invalidate();
 		return "home";
 	}
 }

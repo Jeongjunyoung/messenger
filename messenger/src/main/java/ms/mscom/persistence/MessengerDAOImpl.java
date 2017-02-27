@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import ms.mscom.domain.RelationUser;
+import ms.mscom.domain.UserRequest;
 import ms.mscom.domain.UserVO;
 
 @Repository
@@ -27,5 +29,21 @@ public class MessengerDAOImpl implements MessengerDAO {
 	@Override
 	public void addRequest(Map<String, String> map) throws Exception {
 		sqlSession.insert(namespace+".addRequest", map);
+	}
+	@Override
+	public List<UserRequest> getRequestList(String user_id) throws Exception {
+		return sqlSession.selectList(namespace+".request_list", user_id);
+	}
+	@Override
+	public void requestAccept(RelationUser ru) throws Exception {
+		sqlSession.insert(namespace+".acceptRequest", ru);
+	}
+	@Override
+	public void updateRequestList(RelationUser ru) throws Exception {
+		sqlSession.update(namespace+".requestList_accept", ru);
+	}
+	@Override
+	public List<RelationUser> getFriendsList(String user_id) throws Exception {
+		return sqlSession.selectList(namespace+".getFriendsList", user_id);
 	}
 }

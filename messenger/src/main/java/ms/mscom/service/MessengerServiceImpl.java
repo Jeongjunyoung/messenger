@@ -7,6 +7,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import ms.mscom.domain.RelationUser;
+import ms.mscom.domain.UserRequest;
 import ms.mscom.domain.UserVO;
 import ms.mscom.persistence.MessengerDAO;
 
@@ -29,5 +31,17 @@ public class MessengerServiceImpl implements MessengerService {
 	public void addRequest(Map<String, String> map) throws Exception {
 		dao.addRequest(map);
 	}
-
+	@Override
+	public List<UserRequest> getRequestList(String user_id) throws Exception {
+		return dao.getRequestList(user_id);
+	}
+	@Override
+	public void requestAccept(RelationUser ru) throws Exception {
+		dao.requestAccept(ru);
+		dao.updateRequestList(ru);
+	}
+	@Override
+	public List<RelationUser> getFriendsList(String user_id) throws Exception {
+		return dao.getFriendsList(user_id);
+	}
 }

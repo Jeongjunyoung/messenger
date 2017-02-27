@@ -14,4 +14,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="addRequest">
 		insert into user_request(r_count, request_id, response_id, request_date, state) values(r_count.nextval,#{request_id}, #{response_id}, SYSDATE, 'Waiting')
 	</insert>
+	<select id="request_list" resultType="UserRequest">
+		select * from user_request
+			where response_id = #{user_id} and state = 'Waiting'
+	</select>
+	<insert id="acceptRequest">
+		insert into relation_user(user_1, user_2, state) values(#{user_1}, #{user_2}, 'friend')
+	</insert>
+	<update id="requestList_accept">
+		update user_request set state = 'accept'
+			where response_id = #{user_1} and request_id = #{user_2}
+	</update>
+	<select id="getFriendsList" resultType="RelationUser">
+		select * from relation_user
+			where user_1 = #{user_id} or user_2 = #{user_id}
+	</select>
 </mapper>
